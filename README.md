@@ -14,7 +14,9 @@ An interactive playground for chaotic systems, living particles, and generative 
 
 </div>
 
-**Public demo:** pending the first GitHub Pages deployment. The working local demo is [http://localhost:4173](http://localhost:4173) after starting the server below. No public URL has been claimed or verified yet.
+**[Open the live observatory →](https://bidepanwin.github.io/chaos-atlas/)** · [Source on GitHub](https://github.com/bidepanwin/chaos-atlas)
+
+Live on GitHub Pages. You can also run it locally at [http://localhost:4173](http://localhost:4173) using the commands below.
 
 ## The experiments
 

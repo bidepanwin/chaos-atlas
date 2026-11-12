@@ -14,7 +14,9 @@
 
 </div>
 
-**在线演示：**等待首次 GitHub Pages 部署。启动项目后，本地演示地址为 [http://localhost:4173](http://localhost:4173)。目前尚未发布或验证公网演示地址。
+**[打开在线实验室 →](https://bidepanwin.github.io/chaos-atlas/)** · [GitHub 源码仓库](https://github.com/bidepanwin/chaos-atlas)
+
+已部署至 GitHub Pages。也可以按下方步骤启动项目，通过 [http://localhost:4173](http://localhost:4173) 在本地体验。
 
 ## 三个实验
 
