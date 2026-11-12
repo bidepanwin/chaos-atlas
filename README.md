@@ -37,6 +37,7 @@ These are visual experiments. The particle-life rules are a simplified artificia
 - Export a PNG wallpaper, including a 4K option.
 - Pause, restart, or enter a distraction-free view.
 - Use a responsive interface with keyboard-accessible controls and reduced-motion support.
+- Read comfortably with 16px body text, 14–16px controls, and labels of at least 12px. On phones, the canvas appears before the settings and text panels stack vertically.
 
 Everything runs in the browser. There is no account, backend, analytics, CDN, or API key. The live readouts come from the running simulation.
 
