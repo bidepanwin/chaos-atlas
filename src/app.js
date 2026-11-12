@@ -5,14 +5,22 @@ const $$ = (selector) => [...document.querySelectorAll(selector)];
 const defaults = { scene: 'lorenz', seed: 2048, palette: 'lichen', speed: 1, force: 1, density: 1 };
 const scenes = ['lorenz', 'flow', 'life'];
 const palettes = {
-  lichen: { name: 'LICHEN', color: '#d4ed9c', wavelength: 555 },
-  glacier: { name: 'GLACIER', color: '#9bcbe5', wavelength: 480 },
-  rose: { name: 'ROSE', color: '#e2a4bc', wavelength: 650 },
-  ember: { name: 'EMBER', color: '#e7b37b', wavelength: 610 },
-  mono: { name: 'SILVER', color: '#e6e4db', wavelength: '—' },
+  lichen: { name: ['LICHEN', '苔绿'], color: '#d4ed9c' },
+  glacier: { name: ['GLACIER', '冰川'], color: '#9bcbe5' },
+  rose: { name: ['ROSE', '玫瑰'], color: '#e2a4bc' },
+  ember: { name: ['EMBER', '余烬'], color: '#e7b37b' },
+  mono: { name: ['SILVER', '银白'], color: '#e6e4db' },
 };
 const translations = {
   en: {
+    mastheadCaption: 'AN OBSERVATORY<br/>FOR BEAUTIFUL DISORDER',
+    pageTitle: 'CHAOS ATLAS — Beautiful disorder',
+    metaDescription: 'A small observatory for beautiful disorder. Explore living particle systems, discover strange attractors, and make a little chaos of your own.',
+    mainNavigation: 'Main navigation', languageLabel: 'Language', experimentsLabel: 'Experiments',
+    paletteLabel: 'Color palette', paletteName: '{name} palette', seedLabel: 'World seed, up to eight digits',
+    simulationLabel: 'Interactive particle simulation', signalLabel: 'Rolling trace of average particle motion',
+    homeLabel: 'Chaos Atlas home', githubLabel: 'Star Chaos Atlas on GitHub', closeDialog: 'Close dialog',
+    axisY: 'Y — PHASE SPACE', axisX: 'X — INITIAL CONDITIONS', frameRate: 'FRAME RATE', lastSamples: 'LAST 48 SAMPLES',
     navLab: 'Laboratory', navGuide: 'Field guide ↗', system: 'ALL SYSTEMS CURIOUS',
     introEyebrow: 'INDEPENDENT EXPERIMENT NO. 001—003', headline: 'A beautiful kind of <em>disorder.</em>',
     intro: 'A playground for curious minds.<br/>Change a variable. See what emerges.',
@@ -40,6 +48,14 @@ const translations = {
     pauseLabel: 'Pause simulation', resumeLabel: 'Resume simulation', immersiveLabel: 'Enter immersive mode', exitLabel: 'Exit immersive mode',
   },
   zh: {
+    mastheadCaption: '一座观察<br/>美丽无序的实验室',
+    pageTitle: 'CHAOS ATLAS · 混沌图谱 — 美丽的无序',
+    metaDescription: '一座观察美丽无序的小型实验室。探索奇异吸引子、流场花园和粒子生命，亲手生成并分享属于你的混沌世界。',
+    mainNavigation: '主导航', languageLabel: '语言', experimentsLabel: '实验场景',
+    paletteLabel: '色彩方案', paletteName: '{name}配色', seedLabel: '世界种子，最多八位数字',
+    simulationLabel: '可交互的粒子模拟', signalLabel: '平均粒子运动强度的实时曲线',
+    homeLabel: '混沌图谱首页', githubLabel: '在 GitHub 收藏混沌图谱', closeDialog: '关闭弹窗',
+    axisY: 'Y — 相空间', axisX: 'X — 初始条件', frameRate: '帧率', lastSamples: '最近 48 次采样',
     navLab: '实验室', navGuide: '观测手册 ↗', system: '好奇心，运行中',
     introEyebrow: '独立实验 NO. 001—003', headline: '一种美丽的 <em>无序。</em>',
     intro: '给好奇心一片游乐场。<br/>改变一个变量，看看会发生什么。',
@@ -65,22 +81,22 @@ const translations = {
 };
 const sceneInfo = {
   lorenz: {
-    code: 'LORENZ SYSTEM / 1963', title: ['The butterfly effect', '蝴蝶效应'],
+    code: ['LORENZ SYSTEM / 1963', '洛伦兹系统 / 1963'], title: ['The butterfly effect', '蝴蝶效应'],
     note: ['Two almost identical beginnings. Two entirely different futures. A reminder that small things can change everything.', '几乎相同的起点，截然不同的未来。初始条件的微小偏差，也能让轨迹渐行渐远。'],
     hint: ['DRAG TO ROTATE · SCROLL TO ZOOM', '拖动旋转 · 滚轮缩放'], force: ['Chaos / ρ', '混沌参数 / ρ'],
     equation: 'dx/dt = σ(y − x)<br/>dy/dt = x(ρ − z) − y<br/>dz/dt = xy − βz',
   },
   flow: {
-    code: 'ANALYTIC FLOW / STREAM FUNCTION', title: ['Follow the invisible', '追随无形之流'],
+    code: ['ANALYTIC FLOW / STREAM FUNCTION', '解析流场 / 流函数'], title: ['Follow the invisible', '追随无形之流'],
     note: ['No particle knows the whole picture. Each follows its local current, and a garden of invisible paths begins to bloom.', '没有一颗粒子知道全貌。它们只追随所在位置的流向，无数局部轨迹，却渐渐长成了一座花园。'],
     hint: ['MOVE TO STIR · DRAG TO DISTURB', '移动指针搅动流场 · 拖动扰动'], force: ['Field complexity', '流场复杂度'],
-    equation: 'v = (∂ψ/∂y, −∂ψ/∂x)<br/>dp/dt = v(p, t)<br/>ψ = evolving stream function',
+    equation: ['v = (∂ψ/∂y, −∂ψ/∂x)<br/>dp/dt = v(p, t)<br/>ψ = evolving stream function', 'v = (∂ψ/∂y, −∂ψ/∂x)<br/>dp/dt = v(p, t)<br/>ψ = 随时间演化的流函数'],
   },
   life: {
-    code: 'PARTICLE LIFE / EMERGENT SYSTEM', title: ['Together, something new', '聚在一起，便有了生命'],
+    code: ['PARTICLE LIFE / EMERGENT SYSTEM', '粒子生命 / 涌现系统'], title: ['Together, something new', '聚在一起，便有了生命'],
     note: ['A little attraction. A little resistance. Without a plan or a leader, tiny particles find a way to become something more.', '一点吸引，一点排斥。没有蓝图，也没有指挥者，微小的粒子依靠彼此间的规则，生长出意想不到的形态。'],
     hint: ['MOVE TO ATTRACT · DRAG TO REPEL', '移动指针吸引 · 按住拖动排斥'], force: ['Interaction strength', '相互作用强度'],
-    equation: 'Fᵢ = Σ f(aᵢⱼ, rᵢⱼ)<br/>dv/dt = F − γv<br/>periodic boundaries / 4 species',
+    equation: ['Fᵢ = Σ f(aᵢⱼ, rᵢⱼ)<br/>dv/dt = F − γv<br/>periodic boundaries / 4 species', 'Fᵢ = Σ f(aᵢⱼ, rᵢⱼ)<br/>dv/dt = F − γv<br/>周期边界 / 4 种粒子'],
   },
 };
 
@@ -93,6 +109,11 @@ const numberParam = (key, fallback, min, max, step = 0) => {
 };
 let savedLanguage;
 try { savedLanguage = localStorage.getItem('chaos-atlas-language'); } catch { /* Storage is optional. */ }
+const supportedLanguage = (value) => {
+  const language = String(value || '').toLowerCase().split(/[-_]/)[0];
+  return ['zh', 'en'].includes(language) ? language : null;
+};
+const browserLanguage = (navigator.languages || [navigator.language]).map(supportedLanguage).find(Boolean);
 const state = {
   ...defaults,
   scene: scenes.includes(params.get('scene')) ? params.get('scene') : defaults.scene,
@@ -101,11 +122,11 @@ const state = {
   speed: numberParam('speed', defaults.speed, 0.2, 2, 0.1),
   density: numberParam('density', defaults.density, 0.3, 1.5, 0.05),
   force: numberParam('force', defaults.force, 0, 2, 0.02),
-  language: (params.get('lang') || savedLanguage) === 'zh' ? 'zh' : 'en',
+  language: supportedLanguage(params.get('lang')) || supportedLanguage(savedLanguage) || browserLanguage || 'en',
   running: !matchMedia('(prefers-reduced-motion: reduce)').matches,
 };
 const t = (key) => translations[state.language][key] || translations.en[key] || key;
-const localized = (values) => values[state.language === 'zh' ? 1 : 0];
+const localized = (values) => Array.isArray(values) ? values[state.language === 'zh' ? 1 : 0] : values;
 let toastTimer;
 function toast(message) {
   $('#toast').textContent = message;
@@ -169,9 +190,9 @@ function updateParameters() {
 function updateScene() {
   const info = sceneInfo[state.scene];
   $$('.scene-button').forEach((button) => { const active = button.dataset.scene === state.scene; button.classList.toggle('active', active); button.setAttribute('aria-pressed', active); });
-  $('#scene-code').textContent = info.code; $('#scene-title').textContent = localized(info.title);
+  $('#scene-code').textContent = localized(info.code); $('#scene-title').textContent = localized(info.title);
   $('#field-note').textContent = localized(info.note); $('#interaction-hint').textContent = localized(info.hint);
-  $('#complexity-label').textContent = localized(info.force); $('#equation').innerHTML = info.equation;
+  $('#complexity-label').textContent = localized(info.force); $('#equation').innerHTML = localized(info.equation);
   $('#note-number').textContent = `[ 00${scenes.indexOf(state.scene) + 1} ]`;
   const particlesLabel = $('.telemetry [data-i18n="particles"]');
   particlesLabel.textContent = state.scene === 'lorenz' ? (state.language === 'zh' ? '轨迹采样' : 'SAMPLES') : t('particles');
@@ -183,7 +204,12 @@ function updateScene() {
 function updatePalette() {
   document.documentElement.style.setProperty('--accent', palettes[state.palette].color);
   $$('.palette').forEach((button) => { const active = button.dataset.palette === state.palette; button.classList.toggle('active', active); button.setAttribute('aria-pressed', active); });
-  $('#palette-name').textContent = palettes[state.palette].name;
+  $('#palette-name').textContent = localized(palettes[state.palette].name);
+  $$('.palette').forEach((button) => {
+    const name = localized(palettes[button.dataset.palette].name);
+    const label = t('paletteName').replace('{name}', name);
+    button.setAttribute('aria-label', label); button.title = label;
+  });
   $('#wavelength').textContent = palettes[state.palette].color.toUpperCase();
   simulation.setPalette(state.palette); drawSignal(lastTrace);
 }
@@ -205,15 +231,24 @@ function renderGuide() {
     { title: zh ? '02 / 流场花园' : '02 / The flow garden',
       body: zh ? '粒子沿解析流函数形成的速度场前进，留下短暂轨迹。复杂度改变次级涡旋的强度。移动指针可加入局部旋涡。这是一个程序生成的流场，并非完整的流体力学求解器。' : 'Particles follow the velocity field of an evolving analytic stream function, leaving short histories behind. Complexity changes the strength of secondary vortices. Move your pointer to introduce a local swirl. This is a procedural field, rather than a full fluid dynamics solver.', formula: 'v = (∂ψ/∂y, −∂ψ/∂x)' },
     { title: zh ? '03 / 粒子生命' : '03 / Particle life',
-      body: zh ? '四种粒子依照由种子生成的关系矩阵彼此吸引或排斥。近距离排斥避免粒子堆叠；阻尼稳定运动。边界首尾相连。移动指针吸引粒子，按住拖动则排斥。它是涌现行为的视觉模型，不代表真实生物。' : 'Four species attract or repel according to a seed-generated interaction matrix. Short-range repulsion prevents collapse; drag damps velocity. Edges wrap into a periodic world. Move your pointer to attract, or hold and drag to repel. This is a visual model of emergence, not a model of biological organisms.', formula: 'local forces + damping + periodic boundaries' },
+      body: zh ? '四种粒子依照由种子生成的关系矩阵彼此吸引或排斥。近距离排斥避免粒子堆叠；阻尼稳定运动。边界首尾相连。移动指针吸引粒子，按住拖动则排斥。它是涌现行为的视觉模型，不代表真实生物。' : 'Four species attract or repel according to a seed-generated interaction matrix. Short-range repulsion prevents collapse; drag damps velocity. Edges wrap into a periodic world. Move your pointer to attract, or hold and drag to repel. This is a visual model of emergence, not a model of biological organisms.', formula: zh ? '局部作用力 + 阻尼 + 周期边界' : 'local forces + damping + periodic boundaries' },
   ];
   $('#guide-content').innerHTML = guides.map((guide) => `<section class="guide-section"><h3>${guide.title}</h3><p>${guide.body}</p><div class="formula">${guide.formula}</div></section>`).join('');
 }
 function applyLanguage() {
   document.documentElement.lang = state.language === 'zh' ? 'zh-CN' : 'en';
+  document.title = t('pageTitle');
+  $('meta[name="description"]').content = t('metaDescription');
   $$('[data-i18n]').forEach((element) => { element.innerHTML = t(element.dataset.i18n); });
-  $('#language-button').textContent = state.language === 'zh' ? 'EN' : '中文';
-  $('#language-button').setAttribute('aria-label', state.language === 'zh' ? 'Switch to English' : '切换为中文');
+  $$('[data-i18n-aria-label]').forEach((element) => element.setAttribute('aria-label', t(element.dataset.i18nAriaLabel)));
+  $$('[data-language]').forEach((button) => {
+    const active = button.dataset.language === state.language;
+    button.classList.toggle('active', active); button.setAttribute('aria-pressed', String(active));
+  });
+  $('.brand').setAttribute('aria-label', t('homeLabel'));
+  $$('.close-dialog').forEach((button) => { button.setAttribute('aria-label', t('closeDialog')); button.title = t('closeDialog'); });
+  $('#immersive-button').setAttribute('aria-label', t(document.body.classList.contains('is-immersive') ? 'exitLabel' : 'immersiveLabel'));
+  $('#immersive-button').title = `${t('immersiveLabel')} (F)`;
   $('#share-button').setAttribute('aria-label', state.language === 'zh' ? '分享这个世界' : 'Share this world');
   $('#share-button').title = state.language === 'zh' ? '分享这个世界' : 'Share this world';
   const sizes = state.language === 'zh' ? ['桌面 — 2560 × 1440', '4K — 3840 × 2160', '手机 — 1440 × 2560', '方形 — 2048 × 2048'] : ['Desktop — 2560 × 1440', '4K — 3840 × 2160', 'Phone — 1440 × 2560', 'Square — 2048 × 2048'];
@@ -258,7 +293,10 @@ $('#exit-immersive').addEventListener('click', () => setImmersive(false));
 $('#guide-button').addEventListener('click', () => openDialog('#guide-dialog'));
 $('#read-note').addEventListener('click', () => openDialog('#guide-dialog'));
 $('#export-button').addEventListener('click', () => openDialog('#export-dialog'));
-$('#language-button').addEventListener('click', () => { state.language = state.language === 'zh' ? 'en' : 'zh'; applyLanguage(); syncURL(); });
+$$('[data-language]').forEach((button) => button.addEventListener('click', () => {
+  if (state.language === button.dataset.language) return;
+  state.language = button.dataset.language; applyLanguage(); syncURL();
+}));
 $$('.close-dialog').forEach((button) => button.addEventListener('click', () => button.closest('dialog').close()));
 $$('dialog').forEach((dialog) => dialog.addEventListener('click', (event) => {
   const rect = dialog.getBoundingClientRect();

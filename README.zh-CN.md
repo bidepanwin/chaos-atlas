@@ -54,7 +54,9 @@
 | `F` | 进入或退出沉浸模式 |
 | `Esc` | 关闭弹窗或退出沉浸模式 |
 
-点击界面顶部的 **中文** 可切换显示语言。
+通过页头显著的 **中文 / EN** 两个选项切换语言，桌面和手机均可使用。当前语言会高亮显示，并保存为下次访问的偏好。语言选择优先级为：有效的 `lang=zh` 或 `lang=en` URL 参数 → 已保存选择 → 浏览器语言 → 英语。切换语言会保留当前实验和参数。
+
+也可以直接打开[中文版](https://bidepanwin.github.io/chaos-atlas/?lang=zh)或[英文版](https://bidepanwin.github.io/chaos-atlas/?lang=en)。
 
 ## 本地运行
 

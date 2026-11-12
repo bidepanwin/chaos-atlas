@@ -54,7 +54,9 @@ Wallpaper export redraws the current scene geometry at the selected resolution r
 | `F` | Enter or leave immersive mode |
 | `Esc` | Close a dialog or leave immersive mode |
 
-Use the **中文** control to switch the interface language.
+Use the visible **中文 / EN** options in the header to switch languages on desktop or mobile. The current choice is highlighted and saved for future visits. Language selection follows this order: a valid `lang=zh` or `lang=en` URL parameter → saved preference → browser language → English. Switching languages keeps the current experiment and parameters intact.
+
+Open directly in [中文](https://bidepanwin.github.io/chaos-atlas/?lang=zh) or [English](https://bidepanwin.github.io/chaos-atlas/?lang=en).
 
 ## Run locally
 
