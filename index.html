@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101210" />
+    <meta name="description" content="A small observatory for beautiful disorder. Explore living particle systems, discover strange attractors, and make a little chaos of your own." />
+    <meta property="og:title" content="CHAOS ATLAS — An observatory for beautiful disorder" />
+    <meta property="og:description" content="Three interactive worlds. Infinite beautiful accidents. Explore, tune, share, and export your own generative art." />
+    <meta property="og:type" content="website" />
+    <title>CHAOS ATLAS — Beautiful disorder</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <header class="masthead">
+      <a class="brand" href="./" aria-label="Chaos Atlas home">
+        <svg class="brand-mark" viewBox="0 0 44 44" fill="none" aria-hidden="true"><ellipse cx="22" cy="22" rx="20" ry="9" transform="rotate(-40 22 22)"/><ellipse cx="22" cy="22" rx="20" ry="9" transform="rotate(40 22 22)"/><circle cx="22" cy="22" r="3"/></svg>
+        <span>CHAOS<span class="brand-bottom">ATLAS<span class="brand-dot">®</span></span></span>
+      </a>
+      <div class="masthead-caption">AN OBSERVATORY<br/>FOR BEAUTIFUL DISORDER</div>
+      <nav aria-label="Main navigation"><a href="#laboratory" class="nav-active" data-i18n="navLab">Laboratory</a><button id="guide-button" data-i18n="navGuide">Field guide <span>↗</span></button><a class="source-link" href="https://github.com/bidepanwin/chaos-atlas" target="_blank" rel="noopener noreferrer" aria-label="Star Chaos Atlas on GitHub">GitHub ↗</a><button id="language-button" aria-label="Switch to Chinese">中文</button></nav>
+      <div class="system-status"><i></i><span data-i18n="system">ALL SYSTEMS CURIOUS</span></div>
+    </header>
+
+    <main id="laboratory">
+      <section class="intro">
+        <div><div class="eyebrow"><span class="cross">+</span><span data-i18n="introEyebrow">INDEPENDENT EXPERIMENT NO. 001—003</span></div><h1 data-i18n="headline">A beautiful kind of <em>disorder.</em></h1></div>
+        <p data-i18n="intro">A playground for curious minds.<br/>Change a variable. See what emerges.</p>
+      </section>
+
+      <div class="laboratory">
+        <aside class="controls">
+          <div class="section-label"><span data-i18n="experiments">01 / EXPERIMENTS</span><span>↙</span></div>
+          <div class="scene-list" role="group" aria-label="Experiments">
+            <button class="scene-button active" data-scene="lorenz" aria-pressed="true"><span class="scene-number">01</span><span><strong data-i18n="lorenz">Strange attractor</strong><small data-i18n="lorenzSub">ORDER HIDING IN CHAOS</small></span><span class="scene-glyph">∞</span></button>
+            <button class="scene-button" data-scene="flow" aria-pressed="false"><span class="scene-number">02</span><span><strong data-i18n="flow">Flow garden</strong><small data-i18n="flowSub">FOLLOW THE INVISIBLE</small></span><span class="scene-glyph">≋</span></button>
+            <button class="scene-button" data-scene="life" aria-pressed="false"><span class="scene-number">03</span><span><strong data-i18n="life">Particle life</strong><small data-i18n="lifeSub">SIMPLE RULES. COMPLEX LIFE.</small></span><span class="scene-glyph">⠿</span></button>
+          </div>
+
+          <div class="parameter-section"><div class="section-label"><span data-i18n="parameters">02 / PARAMETERS</span><button class="text-button" id="reset-button" data-i18n="reset">RESET ↺</button></div>
+            <label class="slider-label" for="speed"><span data-i18n="speed">Time scale</span><output id="speed-output" for="speed">1.0×</output></label><input type="range" id="speed" min="0.2" max="2" step="0.1" value="1" />
+            <label class="slider-label" for="complexity"><span id="complexity-label">Chaos / ρ</span><output id="complexity-output" for="complexity">28.0</output></label><input type="range" id="complexity" min="0" max="100" step="1" value="50" />
+            <label class="slider-label" for="density"><span data-i18n="density">Particle density</span><output id="density-output" for="density">100%</output></label><input type="range" id="density" min="30" max="150" step="5" value="100" />
+          </div>
+
+          <div class="palette-section"><div class="section-label"><span data-i18n="palette">03 / COLOR PALETTE</span></div><div class="palette-options" role="group" aria-label="Color palette">
+            <button class="palette active" data-palette="lichen" aria-label="Lichen palette" aria-pressed="true" style="--swatch:#d4ed9c"><span></span></button><button class="palette" data-palette="glacier" aria-label="Glacier palette" aria-pressed="false" style="--swatch:#9bcbe5"><span></span></button><button class="palette" data-palette="rose" aria-label="Rose palette" aria-pressed="false" style="--swatch:#e2a4bc"><span></span></button><button class="palette" data-palette="ember" aria-label="Ember palette" aria-pressed="false" style="--swatch:#e7b37b"><span></span></button><button class="palette" data-palette="mono" aria-label="Monochrome palette" aria-pressed="false" style="--swatch:#e6e4db"><span></span></button>
+          </div><div class="palette-caption"><span id="palette-name">LICHEN</span><span>HEX <span id="wavelength">#D4ED9C</span></span></div></div>
+
+          <button id="random-button" class="random-button"><span class="dice-icon">⠿</span><span data-i18n="random">A little serendipity</span><span>↗</span></button>
+          <div class="seed-row"><label for="seed" data-i18n="seed">WORLD SEED</label><input id="seed" type="text" maxlength="8" pattern="[0-9]{1,8}" inputmode="numeric" aria-label="World seed, up to eight digits" value="2048"/><span>↵</span></div>
+        </aside>
+
+        <section class="viewport" aria-label="Interactive particle simulation">
+          <canvas id="simulation" aria-label="Animated strange attractor. Change parameters using the controls, or drag to interact."></canvas>
+          <div class="viewport-top"><div><div class="eyebrow" id="scene-code">LORENZ SYSTEM / 1963</div><h2 id="scene-title">The butterfly effect</h2></div><div class="live-badge"><i></i><span id="live-label">LIVE</span></div></div>
+          <div class="axis-label axis-y">Y — PHASE SPACE</div><div class="axis-label axis-x">X — INITIAL CONDITIONS</div>
+          <div class="canvas-cross cross-tl">+</div><div class="canvas-cross cross-tr">+</div><div class="canvas-cross cross-bl">+</div><div class="canvas-cross cross-br">+</div>
+          <div class="viewport-equation" id="equation">dx/dt = σ(y − x)<br/>dy/dt = x(ρ − z) − y<br/>dz/dt = xy − βz</div>
+          <div class="viewport-bottom"><span class="interaction-hint" id="interaction-hint">DRAG TO ROTATE · SCROLL TO ZOOM</span><div class="canvas-tools"><button id="pause-button" title="Pause simulation (Space)" aria-label="Pause simulation"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3v10M11 3v10"/></svg></button><button id="immersive-button" title="Immersive mode (F)" aria-label="Enter immersive mode"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4m4 0h4v4M2 10v4h4m4 0h4v-4"/></svg></button></div></div>
+          <button id="exit-immersive" class="exit-immersive" data-i18n="exitImmersive">EXIT IMMERSIVE ↙</button>
+          <div class="paused-overlay" id="paused-overlay" hidden><span data-i18n="paused">TIME IS STANDING STILL</span><button id="resume-button" data-i18n="resume">Resume experiment →</button></div>
+        </section>
+      </div>
+
+      <div class="telemetry"><div><i class="tiny-dot"></i><span data-i18n="render">LOCAL RENDER</span></div><div><span data-i18n="particles">PARTICLES</span><strong id="particle-stat">—</strong></div><div><span>FRAME RATE</span><strong><span id="fps-stat">—</span> <small>FPS</small></strong></div><div><span data-i18n="elapsed">ELAPSED</span><strong id="elapsed-stat">00:00</strong></div><div class="telemetry-end"><span data-i18n="engine">DETERMINISTIC SEED · ENDLESS POSSIBILITIES</span><span class="cross">+</span></div></div>
+
+      <section class="bottom-grid">
+        <article class="panel signal-panel"><div class="section-label"><span data-i18n="signal">04 / LIVE SIGNAL</span><span class="signal-value" id="activity-value">0.000</span></div><canvas id="signal" aria-label="Rolling trace of average particle motion"></canvas><div class="panel-foot"><span id="signal-label" data-i18n="motionSignal">MEAN MOTION / NORMALIZED</span><span>LAST 48 SAMPLES</span></div></article>
+        <article class="panel note-panel"><div class="section-label"><span data-i18n="fieldNote">05 / FIELD NOTE</span><span id="note-number">[ 001 ]</span></div><p id="field-note">Two almost identical beginnings. Two entirely different futures. A reminder that small things can change everything.</p><button class="text-button" id="read-note" data-i18n="readNote">UNDERSTAND THIS WORLD ↗</button></article>
+        <article class="panel collect-panel"><div class="section-label"><span data-i18n="collect">06 / KEEP A LITTLE CHAOS</span><span>↗</span></div><p data-i18n="collectText">This exact moment.<br/>Yours to keep, or pass along.</p><div class="collect-actions"><button class="primary-button" id="export-button"><span data-i18n="export">Export wallpaper</span><span>↓</span></button><button id="share-button" class="icon-button" aria-label="Share this world" title="Share this world"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 11.5l5-5M6 7l-2.5 2.5a4 4 0 005.5 5.5L12 12.5M8 7.5L11 4.5a4 4 0 015.5 5.5L14 12.5"/></svg></button></div></article>
+      </section>
+    </main>
+
+    <footer><span>CHAOS ATLAS <span class="footer-divider">/</span> <span data-i18n="footer">SMALL RULES. INFINITE WORLDS.</span></span><span data-i18n="footerRight">MADE FOR THE JOY OF EXPLORING. <span class="footer-star">✳</span></span></footer>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <dialog id="guide-dialog" aria-labelledby="guide-heading"><div class="dialog-header"><span class="eyebrow" data-i18n="guideEyebrow">THE OBSERVER'S HANDBOOK</span><button class="close-dialog" aria-label="Close field guide">×</button></div><h2 id="guide-heading" data-i18n="guideTitle">A field guide to chaos.</h2><div id="guide-content"></div><div class="shortcut-list"><span><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> <span data-i18n="shortcutScenes">Switch worlds</span></span><span><kbd>Space</kbd> <span data-i18n="shortcutPause">Pause</span></span><span><kbd>R</kbd> <span data-i18n="shortcutRandom">Randomize</span></span><span><kbd>F</kbd> <span data-i18n="shortcutFocus">Immerse</span></span></div><p class="guide-disclaimer" data-i18n="guideDisclaimer">An artistic exploration of mathematical systems. These are numerical simulations, not scientific measurement instruments. All rendering stays on your device.</p></dialog>
+    <dialog id="export-dialog" aria-labelledby="export-heading"><div class="dialog-header"><span class="eyebrow" data-i18n="exportEyebrow">A MOMENT, MADE TANGIBLE</span><button class="close-dialog" aria-label="Close export dialog">×</button></div><h2 id="export-heading" data-i18n="exportTitle">Take the chaos with you.</h2><p class="dialog-description" data-i18n="exportDescription">Your current world, rendered as a clean PNG. No interface, just the good stuff.</p><label class="export-label" for="export-size" data-i18n="canvasSize">CANVAS SIZE</label><select id="export-size"><option value="2560x1440">Desktop — 2560 × 1440</option><option value="3840x2160">4K — 3840 × 2160</option><option value="1440x2560">Phone — 1440 × 2560</option><option value="2048x2048">Square — 2048 × 2048</option></select><button class="primary-button download-button" id="download-button"><span data-i18n="download">Download PNG</span><span>↓</span></button><p class="export-note" data-i18n="exportNote">A fresh composition from the same seed and parameters. Flow trails are rebuilt for a crisp, high resolution image.</p></dialog>
+    <dialog id="share-dialog" aria-labelledby="share-heading"><div class="dialog-header"><span class="eyebrow" data-i18n="shareEyebrow">SAME RULES. SAME BEGINNING.</span><button class="close-dialog" aria-label="Close share dialog">×</button></div><h2 id="share-heading" data-i18n="shareTitle">Send a little serendipity.</h2><p class="dialog-description" data-i18n="shareDescription">This link contains your scene, seed, palette and parameters. Anyone can start from the same world.</p><label class="export-label" for="share-url" data-i18n="worldLink">YOUR WORLD LINK</label><input id="share-url" readonly /><button id="copy-button" class="primary-button download-button" data-i18n="copy">Copy link ↗</button></dialog>
+    <noscript>This observatory needs JavaScript to simulate its worlds. Please enable JavaScript to explore.</noscript>
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
+
