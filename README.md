@@ -35,6 +35,7 @@ These are visual experiments. The particle-life rules are a simplified artificia
 - Choose from five palettes—Lichen, Glacier, Rose, Ember, and Silver—or explore a new seed.
 - Share a URL containing the scene configuration and seed.
 - Export a PNG wallpaper, including a 4K option.
+- Turn on an optional generative observatory melody. It is synthesized locally with Web Audio, responds to the active scene, and never starts until you choose it.
 - Pause, restart, or enter a distraction-free view.
 - Use a responsive interface with keyboard-accessible controls and reduced-motion support.
 - Read comfortably with 16px body text, 14–16px controls, and labels of at least 12px. On phones, the canvas appears before the settings and text panels stack vertically.
@@ -56,6 +57,8 @@ Wallpaper export redraws the current scene geometry at the selected resolution r
 | `Esc` | Close a dialog or leave immersive mode |
 
 Use the visible **中文 / EN** options in the header to switch languages on desktop or mobile. The current choice is highlighted and saved for future visits. Language selection follows this order: a valid `lang=zh` or `lang=en` URL parameter → saved preference → browser language → English. Switching languages keeps the current experiment and parameters intact.
+
+Sound is intentionally opt-in. Click the speaker button inside the canvas, then adjust volume or mute it from the small sound dock. Browsers require a user gesture before Web Audio can start; browsers without Web Audio simply disable the control.
 
 Open directly in [中文](https://bidepanwin.github.io/chaos-atlas/?lang=zh) or [English](https://bidepanwin.github.io/chaos-atlas/?lang=en).
 

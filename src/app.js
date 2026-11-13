@@ -1,4 +1,5 @@
 import { Simulation } from './simulation.js';
+import { ObservatorySound } from './sound.js';
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -21,6 +22,9 @@ const translations = {
     simulationLabel: 'Interactive particle simulation', signalLabel: 'Rolling trace of average particle motion',
     homeLabel: 'Chaos Atlas home', githubLabel: 'Star Chaos Atlas on GitHub', closeDialog: 'Close dialog',
     axisY: 'Y — PHASE SPACE', axisX: 'X — INITIAL CONDITIONS', frameRate: 'FRAME RATE', lastSamples: 'LAST 48 SAMPLES',
+    soundTitle: 'OBSERVATORY SOUND', soundSubtitle: 'A small melody shaped by this world', volume: 'VOLUME',
+    volumeLabel: 'Sound volume', mute: 'MUTE', unmute: 'SOUND ON', soundEnable: 'Enable observatory sound',
+    soundDisable: 'Mute observatory sound', soundResume: 'Unmute observatory sound', soundUnavailable: 'Sound is not available in this browser.', soundEnabled: 'Sound enabled',
     navLab: 'Laboratory', navGuide: 'Field guide ↗', system: 'ALL SYSTEMS CURIOUS',
     introEyebrow: 'INDEPENDENT EXPERIMENT NO. 001—003', headline: 'A beautiful kind of <em>disorder.</em>',
     intro: 'A playground for curious minds.<br/>Change a variable. See what emerges.',
@@ -56,6 +60,9 @@ const translations = {
     simulationLabel: '可交互的粒子模拟', signalLabel: '平均粒子运动强度的实时曲线',
     homeLabel: '混沌图谱首页', githubLabel: '在 GitHub 收藏混沌图谱', closeDialog: '关闭弹窗',
     axisY: 'Y — 相空间', axisX: 'X — 初始条件', frameRate: '帧率', lastSamples: '最近 48 次采样',
+    soundTitle: '实验室声音', soundSubtitle: '由这个世界生成的一小段旋律', volume: '音量',
+    volumeLabel: '声音音量', mute: '静音', unmute: '开启声音', soundEnable: '开启实验室声音',
+    soundDisable: '关闭实验室声音', soundResume: '取消静音', soundUnavailable: '当前浏览器不支持声音。', soundEnabled: '声音已开启',
     navLab: '实验室', navGuide: '观测手册 ↗', system: '好奇心，运行中',
     introEyebrow: '独立实验 NO. 001—003', headline: '一种美丽的 <em>无序。</em>',
     intro: '给好奇心一片游乐场。<br/>改变一个变量，看看会发生什么。',
@@ -173,8 +180,20 @@ function updateStats(stats) {
   $('#elapsed-stat').textContent = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
   $('#activity-value').textContent = stats.activity.toFixed(3);
   lastTrace = stats.trace; drawSignal(lastTrace);
+  if (observatorySound) observatorySound.setStats(stats);
 }
+let observatorySound;
 const simulation = new Simulation($('#simulation'), { onStats: updateStats });
+observatorySound = new ObservatorySound({
+  onAvailability: (available) => {
+    if (!available) {
+      $('#sound-button').disabled = true;
+      $('#sound-button').title = t('soundUnavailable');
+      $('#sound-dock').hidden = true;
+      toast(t('soundUnavailable'));
+    }
+  },
+});
 
 function updateRange(id, value) {
   const input = $(`#${id}`); input.value = value;
@@ -199,6 +218,7 @@ function updateScene() {
   $('#signal-label').textContent = state.scene === 'lorenz' ? (state.language === 'zh' ? '轨迹切向速度 / 归一化' : 'TANGENT SPEED / NORMALIZED') : t('motionSignal');
   $('#simulation').setAttribute('aria-label', `${localized(info.title)}. ${localized(info.hint)}`);
   simulation.setScene(state.scene);
+  observatorySound.setScene(state.scene);
   updateParameters();
 }
 function updatePalette() {
@@ -249,6 +269,11 @@ function applyLanguage() {
   $$('.close-dialog').forEach((button) => { button.setAttribute('aria-label', t('closeDialog')); button.title = t('closeDialog'); });
   $('#immersive-button').setAttribute('aria-label', t(document.body.classList.contains('is-immersive') ? 'exitLabel' : 'immersiveLabel'));
   $('#immersive-button').title = `${t('immersiveLabel')} (F)`;
+  $('#sound-button').setAttribute('aria-label', t(observatorySound.enabled ? (observatorySound.muted ? 'soundResume' : 'soundDisable') : 'soundEnable'));
+  $('#sound-button').title = t(observatorySound.enabled ? (observatorySound.muted ? 'soundResume' : 'soundDisable') : 'soundEnable');
+  $('#sound-button').classList.toggle('sound-active', observatorySound.enabled && !observatorySound.muted);
+  $('#volume').setAttribute('aria-label', t('volumeLabel'));
+  $('#mute-button').textContent = observatorySound.enabled && !observatorySound.muted ? t('mute') : t('unmute');
   $('#share-button').setAttribute('aria-label', state.language === 'zh' ? '分享这个世界' : 'Share this world');
   $('#share-button').title = state.language === 'zh' ? '分享这个世界' : 'Share this world';
   const sizes = state.language === 'zh' ? ['桌面 — 2560 × 1440', '4K — 3840 × 2160', '手机 — 1440 × 2560', '方形 — 2048 × 2048'] : ['Desktop — 2560 × 1440', '4K — 3840 × 2160', 'Phone — 1440 × 2560', 'Square — 2048 × 2048'];
@@ -293,6 +318,19 @@ $('#exit-immersive').addEventListener('click', () => setImmersive(false));
 $('#guide-button').addEventListener('click', () => openDialog('#guide-dialog'));
 $('#read-note').addEventListener('click', () => openDialog('#guide-dialog'));
 $('#export-button').addEventListener('click', () => openDialog('#export-dialog'));
+$('#sound-button').addEventListener('click', async () => {
+  const enabled = await observatorySound.toggleMute();
+  if (!observatorySound.enabled) return;
+  $('#sound-dock').hidden = false;
+  $('#sound-button').classList.toggle('sound-active', enabled && !observatorySound.muted);
+  applyLanguage();
+  if (enabled && !observatorySound.muted) toast(t('soundEnabled'));
+});
+$('#mute-button').addEventListener('click', async () => {
+  await observatorySound.toggleMute();
+  applyLanguage();
+});
+$('#volume').addEventListener('input', (event) => observatorySound.setVolume(Number(event.target.value) / 100));
 $$('[data-language]').forEach((button) => button.addEventListener('click', () => {
   if (state.language === button.dataset.language) return;
   state.language = button.dataset.language; applyLanguage(); syncURL();
@@ -333,7 +371,11 @@ document.addEventListener('keydown', (event) => {
   else if (event.key === 'Escape') setImmersive(false);
 });
 window.addEventListener('resize', () => drawSignal(lastTrace));
-window.addEventListener('pagehide', (event) => { if (!event.persisted) simulation.destroy(); });
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) observatorySound.suspend();
+  else observatorySound.resume();
+});
+window.addEventListener('pagehide', (event) => { if (!event.persisted) { simulation.destroy(); observatorySound.destroy(); } });
 $('#seed').value = state.seed;
 applyLanguage(); simulation.setSeed(state.seed);
 if (location.search) syncURL();

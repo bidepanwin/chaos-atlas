@@ -185,6 +185,17 @@ select, #share-url { width: 100%; min-width: 0; min-height: 48px; border: 1px so
 .download-button { width: 100%; margin-top: 16px; padding: 14px 17px; }
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translate(-50%, 20px); opacity: 0; z-index: 300; pointer-events: none; border: 1px solid #819a5e; background: #1a2314; color: var(--accent); padding: 14px 20px; font: 14px/1.6 var(--mono); transition: opacity .2s, transform .2s; box-shadow: 0 6px 30px #0008; max-width: 90vw; width: max-content; text-align: center; }
 .toast.visible { opacity: 1; transform: translate(-50%, 0); }
+.canvas-tools button.sound-active { border-color: var(--accent); background: #d4ed9c18; }
+.sound-dock { position: fixed; right: 24px; bottom: 24px; z-index: 250; display: flex; align-items: center; gap: 20px; width: min(480px, calc(100vw - 32px)); padding: 16px 18px; border: 1px solid #718956; background: #161b13f2; box-shadow: 0 12px 45px #0009; backdrop-filter: blur(12px); }
+.sound-dock[hidden] { display: none; }
+.sound-dock > div:first-child { min-width: 0; flex: 1; }
+.sound-dock strong, .sound-dock span { display: block; }
+.sound-dock strong { font: 12px/1.5 var(--mono); color: var(--accent); letter-spacing: .4px; }
+.sound-dock > div:first-child span { margin-top: 4px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.volume-control { display: flex; align-items: center; gap: 10px; color: var(--dim); font: 11px/1.5 var(--mono); white-space: nowrap; }
+.volume-control input[type=range] { width: 90px; height: 24px; }
+.sound-dock > button { border: 1px solid #718956; color: var(--accent); min-height: 38px; padding: 6px 10px; font: 12px/1.5 var(--mono); }
+.sound-dock > button:hover { background: #d4ed9c15; }
 noscript { display: block; text-align: center; padding: 30px; color: var(--accent); }
 
 @media (max-width: 1450px) {
@@ -305,6 +316,10 @@ noscript { display: block; text-align: center; padding: 30px; color: var(--accen
   .shortcut-list { gap: 14px; }
   select, #share-url { font-size: 16px; padding: 10px; }
   .toast { bottom: 16px; padding: 12px 16px; font-size: 14px; }
+  .sound-dock { right: 12px; bottom: 12px; width: calc(100vw - 24px); flex-wrap: wrap; gap: 10px 14px; padding: 14px; }
+  .sound-dock > div:first-child { flex-basis: calc(100% - 12px); }
+  .volume-control { flex: 1; }
+  .volume-control input[type=range] { flex: 1; width: auto; min-width: 80px; }
 }
 @media (max-width: 370px) {
   .masthead { flex-wrap: wrap; gap: 14px; }
